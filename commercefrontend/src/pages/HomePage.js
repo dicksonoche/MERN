@@ -1,18 +1,18 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import axios from 'axios';
 import logger from 'use-reducer-logger'
 //import data from '../data'
 
 const reducer = (state, action) => {
   switch(action.type) {
     case 'FETCH_REQUEST':
-      return {...state, loading: true};
+      return { ...state, loading: true };
     case 'FETCH_SUCCESS':
-      return {...state, products: action.payload, loading: false};
+      return { ...state, products: action.payload, loading: false };
     case 'FETCH_FAIL':
-      return {...state, loading: false, error: action.payload};
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
@@ -23,31 +23,31 @@ const reducer = (state, action) => {
 //I use Link instead of Anchor in order to fix the page refresh, as I want to creat a single page application with multiple screens
 const HomePage = () => {
  
-  const [{loading, error, products}, dispatch] = useReducer(logger(reducer), {
+  const [{ loading, error, products }, dispatch] = useReducer(logger(reducer), {
     products: [],
     loading: true,
     error: '',
-  })
+  });
   //Define an array that contains two parameters: an object and "dispatch" to call an action and update state
   //useReducer accepts two parameters: the reducer and the default state
 
   // const [products, setProducts] = useState([]);
 
   //dispatch the FETCH_REQUEST case before the ajax code so the loader can show while waiting for data from the api
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
         const result = await axios.get('/api/products');
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data })
-      } catch(err) {
+      } catch (err) {
         dispatch({type: 'FETCH_FAIL', payload: err.message})
       }
       
       //setProducts(result.data);
     };
     fetchData();
-  },)
+  }, []);
   //useEffect accepts two parameters. A function and an array. The array is empty because the function...
   //...would be run inside the useEffect only once after rendering this component
 
@@ -84,7 +84,7 @@ const HomePage = () => {
         )}
         </div>
     </>
-  )
+  );
 }
 
 
