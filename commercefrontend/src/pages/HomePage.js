@@ -3,6 +3,7 @@ import React, { useEffect, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios';
 import logger from 'use-reducer-logger'
+import { Grid } from '@mantine/core';
 //import data from '../data'
 
 const reducer = (state, action) => {
@@ -28,7 +29,7 @@ const HomePage = () => {
     loading: true,
     error: '',
   });
-  //Define an array that contains two parameters: an object and "dispatch" to call an action and update state
+  //For defining a use reducer, define an array that contains two parameters: an object and "dispatch" to call an action and update state
   //useReducer accepts two parameters: the reducer and the default state
 
   // const [products, setProducts] = useState([]);
@@ -54,37 +55,40 @@ const HomePage = () => {
   //Async function sends an ajax request, then axios.get method is called to send... 
   //...an ajax request to the api's address, and put the result in the result variable.
   //setProducts parameter in the useEffect returns the result from the backend
-  return (
-    <>
-        <h1>Featured Products</h1>
-        <div className="products">
-        {
-          loading ? ( 
-          <div>Loading...</div>
-        ) : error ? ( 
-          <div>{error}</div>
-        )  : (
-          products.map(product => 
-          (<div className="productItem" key={product.slug}>
-            <Link to={`/product/${product.slug}`}>
-              <img src={product.image} alt={product.name} />
-            </Link>
-            <div className="productInfo">
-            <Link to={`/product/${product.slug}`}>
-            <p>
-              {product.name}
-            </p>
-            </Link>
-            <p>
-              <strong>${product.price}</strong>
-            </p>
-            <button>Add to cart</button>
+  return <>
+      <h1>Featured Products</h1>
+        <Grid gutter="xl">
+          <Grid.Col lg={12}>
+            <div className="products">
+            {
+              loading ? ( 
+              <div>Loading...</div>
+            ) : error ? ( 
+              <div>{error}</div>
+            )  : (
+              products.map(product => 
+              (<div className="productItem" key={product.slug}>
+                <Link to={`/product/${product.slug}`}>
+                  <img src={product.image} alt={product.name} />
+                </Link>
+                <div className="productInfo">
+                <Link to={`/product/${product.slug}`}>
+                <p>
+                  {product.name}
+                </p>
+                </Link>
+                <p>
+                  <strong>${product.price}</strong>
+                </p>
+                <button>Add to cart</button>
+                </div>
+              </div>))
+            )}
             </div>
-          </div>))
-        )}
-        </div>
+          </Grid.Col>
+        
+        </Grid>
     </>
-  );
 }
 
 
